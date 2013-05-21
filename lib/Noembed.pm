@@ -105,7 +105,8 @@ sub register_provider {
 
   my $provider = eval { $class->new(render => $self->{render}) };
   if ($@) {
-    warn "Could not initialize provider $class, disabling: $@";
+    # Skip warnings for missing credentials
+    warn "Could not initialize provider $class, disabling: $@" unless $@ =~ /^can not read/;
     return;
   }
   push @{ $self->{providers} }, $provider;
